@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee https://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+	
+	<welcome-file-list> 
+		<welcome-file>welcome.jsp</welcome-file> 
+	</welcome-file-list>
+	
+	<!-- 모든 클라이언트의 요청에 대한 일괄적인 한글 인코딩처리, 322 -->
+	<filter>
+		<filter-name>characterEncoding</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>characterEncoding</filter-name>
+		<url-pattern>*.do</url-pattern>
+	</filter-mapping>
+	
+	<!-- DispatcherServlet 이 클라이언트의 요청을 가장 먼저 받아들인다, 315 -->
+	<!-- 클라이언트의 요청으로 DispatcherServlet 객체가 생성되면 init() 메소드가 자동으로 실행되어
+	     XmlWebApplicationContext 컨테이너가 구동된다.
+	     (Dis가 handler,controller,view 의 객체를 메모리에 생성하기 위해 스프링컨테이너를 구동시킨다.)  -->
+	<servlet>
+		<!-- 스프링에서 제공하는 DispatcherServlet 를 사용하기 위한 처리 -->
+		<servlet-name>action</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<!-- 서블릿 초기화 파라미터(스프링 설정파일 변경, 319) -->
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/layer/presentation-layer.xml</param-value>
+		</init-param>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>action</servlet-name>
+		<url-pattern>*.do</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ContextLoaderListener가 main/resources 에 있는 파일을 읽어오도록 설정    -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:applicationContext.xml</param-value>
+	</context-param>
+	
+	<!-- 부모컨테이너를 구동하도록 하는 객체 -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	
+</web-app>
